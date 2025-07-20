@@ -31,7 +31,7 @@
     <p>Already have an account? <a href="#">Sign in</a>.</p>
   </div>
 
-   <h1> HAR HAR MAHADEV</h>
+   <h1> Price- 50$</h>
 
   
 </form>
