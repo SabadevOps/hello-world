@@ -31,7 +31,7 @@ form action="action_page.php">
     <p>Already have an account? <a href="#">Sign in</a>.</p>
   </div>
 
-   <h1> Hello Buddy, Good morning </h>
+   <h1> Good Aternoon Nuzhat </h>
 
   
 </form>
