@@ -1,1 +1,64 @@
+pipeline {
+    agent any
 
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/vivekics/hello-world.git'
+            }
+        }
+
+        stage('Maven Clean Package') {
+            steps {
+                sh 'mvn clean package'
+
+                sh '''
+                    echo "WAR files generated:"
+                    ls -lh webapp/target/*.war
+                '''
+            }
+        }
+
+        stage('Deploy WAR to Tomcat') {
+            steps {
+
+                echo 'Deploying WAR to Tomcat...'
+
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'tomcat-server',
+
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: 'webapp/target/*.war',
+                                    removePrefix: 'webapp/target',
+                                    remoteDirectory: '/root/tomcat/webapps',
+                                    flatten: true,
+                                    cleanRemote: false,
+                                    makeEmptyDirs: false
+                                )
+                            ],
+
+                            verbose: true
+                        )
+                    ]
+                )
+
+                echo 'WAR deployment completed!'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and deployment completed successfully!'
+        }
+
+        failure {
+            echo 'Build or deployment failed!'
+        }
+    }
+}
